@@ -2,7 +2,6 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Web.UI.WebControls;
 
 namespace EcommerceWebApp
 {
@@ -24,6 +23,7 @@ namespace EcommerceWebApp
             }
         }
 
+        // LOAD CART
         void LoadCart()
         {
             string email =
@@ -31,87 +31,168 @@ namespace EcommerceWebApp
 
             SqlDataAdapter da =
                 new SqlDataAdapter(
-                    "SELECT ProductName,Quantity FROM Cart WHERE UserEmail=@email",
-                    con);
+                @"SELECT 
+                    Cart.Id,
+                    Cart.ProductName,
+                    Cart.Quantity,
+                    Products.Price,
+                    Products.ImageUrl
+                  FROM Cart
+                  INNER JOIN Products
+                  ON Cart.ProductName = Products.ProductName
+                  WHERE Cart.UserEmail=@email",
+                con);
 
             da.SelectCommand.Parameters.AddWithValue(
                 "@email", email);
 
-            DataTable dt = new DataTable();
+            DataTable dt =
+                new DataTable();
 
             da.Fill(dt);
 
-            GridView1.DataSource = dt;
-
-            GridView1.DataBind();
-        }
-
-        protected void GridView1_RowCommand(object sender,
-            GridViewCommandEventArgs e)
-        {
-            if (e.CommandName == "DeleteItem")
+            if (dt.Rows.Count > 0)
             {
-                int index =
-                    Convert.ToInt32(e.CommandArgument);
+                lblEmpty.Visible = false;
 
-                GridViewRow row =
-                    GridView1.Rows[index];
+                Repeater1.Visible = true;
 
-                string product =
-                    row.Cells[0].Text;
+                Repeater1.DataSource = dt;
 
-                string email =
-                    Session["email"].ToString();
-
-                con.Open();
-
-                SqlCommand cmd =
-                    new SqlCommand(
-                        "DELETE FROM Cart WHERE UserEmail=@email AND ProductName=@product",
-                        con);
-
-                cmd.Parameters.AddWithValue(
-                    "@email", email);
-
-                cmd.Parameters.AddWithValue(
-                    "@product", product);
-
-                cmd.ExecuteNonQuery();
-
-                con.Close();
-
-                LoadCart();
+                Repeater1.DataBind();
             }
+            else
+            {
+                lblEmpty.Visible = true;
+
+                Repeater1.Visible = false;
+            }
+
+            int totalItems = 0;
+
+            decimal totalPrice = 0;
+
+            foreach (DataRow row in dt.Rows)
+            {
+                int qty =
+                    Convert.ToInt32(row["Quantity"]);
+
+                decimal price =
+                    Convert.ToDecimal(row["Price"]);
+
+                totalItems += qty;
+
+                totalPrice += qty * price;
+            }
+
+            lblItems.Text =
+                totalItems.ToString();
+
+            lblTotal.Text =
+                "₹ " + totalPrice.ToString();
         }
 
-        protected void btnContinue_Click(object sender, EventArgs e)
+        // PLUS QUANTITY
+        protected void btnPlus_Click(object sender, EventArgs e)
         {
-            Response.Redirect("Default.aspx");
-        }
+            System.Web.UI.WebControls.Button btn =
+                (System.Web.UI.WebControls.Button)sender;
 
-        protected void btnClearCart_Click(object sender, EventArgs e)
-        {
-            string email =
-                Session["email"].ToString();
+            int id =
+                Convert.ToInt32(btn.CommandArgument);
 
             con.Open();
 
             SqlCommand cmd =
                 new SqlCommand(
-                    "DELETE FROM Cart WHERE UserEmail=@email",
+                    "UPDATE Cart SET Quantity = Quantity + 1 WHERE Id=@id",
                     con);
 
             cmd.Parameters.AddWithValue(
-                "@email", email);
+                "@id", id);
 
             cmd.ExecuteNonQuery();
 
             con.Close();
 
             LoadCart();
+        }
 
-            Response.Write(
-                "<script>alert('Cart Cleared')</script>");
+        // MINUS QUANTITY
+        protected void btnMinus_Click(object sender, EventArgs e)
+        {
+            System.Web.UI.WebControls.Button btn =
+                (System.Web.UI.WebControls.Button)sender;
+
+            int id =
+                Convert.ToInt32(btn.CommandArgument);
+
+            con.Open();
+
+            SqlCommand checkCmd =
+                new SqlCommand(
+                    "SELECT Quantity FROM Cart WHERE Id=@id",
+                    con);
+
+            checkCmd.Parameters.AddWithValue(
+                "@id", id);
+
+            int qty =
+                Convert.ToInt32(
+                    checkCmd.ExecuteScalar());
+
+            if (qty > 1)
+            {
+                SqlCommand cmd =
+                    new SqlCommand(
+                        "UPDATE Cart SET Quantity = Quantity - 1 WHERE Id=@id",
+                        con);
+
+                cmd.Parameters.AddWithValue(
+                    "@id", id);
+
+                cmd.ExecuteNonQuery();
+            }
+
+            con.Close();
+
+            LoadCart();
+        }
+
+        // DELETE PRODUCT
+        protected void btnDelete_Click(object sender, EventArgs e)
+        {
+            System.Web.UI.WebControls.Button btn =
+                (System.Web.UI.WebControls.Button)sender;
+
+            int id =
+                Convert.ToInt32(btn.CommandArgument);
+
+            con.Open();
+
+            SqlCommand cmd =
+                new SqlCommand(
+                    "DELETE FROM Cart WHERE Id=@id",
+                    con);
+
+            cmd.Parameters.AddWithValue(
+                "@id", id);
+
+            cmd.ExecuteNonQuery();
+
+            con.Close();
+
+            LoadCart();
+        }
+
+        // CONTINUE SHOPPING
+        protected void btnContinue_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Default.aspx");
+        }
+        protected void btnCheckout_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Checkout.aspx");
         }
     }
 }

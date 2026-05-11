@@ -213,5 +213,9 @@ namespace EcommerceWebApp
 
             Response.Redirect("Login.aspx");
         }
+        protected void btnMyOrders_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("MyOrders.aspx");
+        }
     }
 }

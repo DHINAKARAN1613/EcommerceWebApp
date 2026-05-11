@@ -7,108 +7,197 @@
 <html>
 <head runat="server">
 
-    <title>Shopping Cart</title>
+<title>My Cart</title>
 
-    <style>
+<style>
 
-        body {
-            font-family: Arial;
-            background: #f5f5f5;
-            margin: 0;
-            padding: 20px;
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        .header {
-            background: #2563eb;
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+body{
+    font-family:'Segoe UI';
+    background:#f1f5f9;
+}
 
-        .title {
-            margin: 0;
-            font-size: 30px;
-        }
+.container{
+    width:95%;
+    margin:auto;
+    padding:30px 0;
+}
 
-        .btn {
-            background: white;
-            color: #2563eb;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
+.topbar{
+    background:white;
+    padding:25px 35px;
+    border-radius:22px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0px 5px 20px rgba(0,0,0,0.08);
+}
 
-        .container {
-            background: white;
-            margin-top: 30px;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
-        }
+.logo{
+    font-size:34px;
+    font-weight:bold;
+    background:linear-gradient(to right,#2563eb,#7c3aed);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
 
-        .carttitle {
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
+.topbtn{
+    background:linear-gradient(to right,#2563eb,#1d4ed8);
+    color:white;
+    border:none;
+    padding:12px 24px;
+    border-radius:14px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+}
 
-        .grid {
-            width: 100%;
-            border-collapse: collapse;
-        }
+.cartsection{
+    margin-top:35px;
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:30px;
+}
 
-        .grid th {
-            background: #2563eb;
-            color: white;
-            padding: 15px;
-            text-align: center;
-        }
+.cartitems{
+    background:white;
+    padding:25px;
+    border-radius:25px;
+    box-shadow:0px 5px 20px rgba(0,0,0,0.08);
+}
 
-        .grid td {
-            padding: 15px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
+.sectiontitle{
+    font-size:32px;
+    font-weight:bold;
+    margin-bottom:25px;
+}
 
-        .deletebtn {
-            background: red;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
+.item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px;
+    border-radius:18px;
+    background:#f8fafc;
+    margin-bottom:18px;
+}
 
-        .deletebtn:hover {
-            background: darkred;
-        }
+.left{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
 
-        .empty {
-            text-align: center;
-            font-size: 25px;
-            color: gray;
-            padding: 50px;
-        }
+.productimg{
+    width:90px;
+    height:90px;
+    object-fit:contain;
+    background:white;
+    padding:10px;
+    border-radius:14px;
+}
 
-        .footer {
-            margin-top: 20px;
-            text-align: right;
-        }
+.name{
+    font-size:24px;
+    font-weight:bold;
+    color:#111827;
+}
 
-        .clearbtn {
-            background: #111827;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
+.price{
+    margin-top:8px;
+    color:#16a34a;
+    font-size:20px;
+    font-weight:bold;
+}
 
-    </style>
+.qtybox{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.qtybtn{
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:50%;
+    background:#2563eb;
+    color:white;
+    font-size:22px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.qtylabel{
+    font-size:24px;
+    font-weight:bold;
+}
+
+.deletebtn{
+    border:none;
+    background:#ef4444;
+    color:white;
+    padding:12px 18px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.summary{
+    background:white;
+    padding:30px;
+    border-radius:25px;
+    height:fit-content;
+    box-shadow:0px 5px 20px rgba(0,0,0,0.08);
+}
+
+.summarytitle{
+    font-size:30px;
+    font-weight:bold;
+    margin-bottom:30px;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    margin-top:18px;
+    font-size:18px;
+}
+
+.total{
+    margin-top:25px;
+    padding-top:20px;
+    border-top:2px solid #e5e7eb;
+    font-size:28px;
+    font-weight:bold;
+}
+
+.checkoutbtn{
+    width:100%;
+    height:58px;
+    margin-top:30px;
+    border:none;
+    border-radius:16px;
+    background:linear-gradient(to right,#2563eb,#7c3aed);
+    color:white;
+    font-size:20px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.empty{
+    text-align:center;
+    padding:80px;
+    font-size:30px;
+    color:gray;
+}
+
+</style>
 
 </head>
 
@@ -116,72 +205,137 @@
 
 <form id="form1" runat="server">
 
-    <div class="header">
+<div class="container">
 
-        <h2 class="title">
-            Shopping Cart
-        </h2>
+    <div class="topbar">
+
+        <div class="logo">
+            🛒 My Cart
+        </div>
 
         <asp:Button ID="btnContinue"
             runat="server"
-            Text="Continue Shopping"
-            CssClass="btn"
+            Text="← Continue Shopping"
+            CssClass="topbtn"
             OnClick="btnContinue_Click" />
 
     </div>
 
-    <div class="container">
+    <div class="cartsection">
 
-        <h2 class="carttitle">
-            Added Cart Items
-        </h2>
+        <div class="cartitems">
 
-        <asp:GridView ID="GridView1"
-            runat="server"
-            AutoGenerateColumns="False"
-            CssClass="grid"
-            Width="100%"
-            OnRowCommand="GridView1_RowCommand"
-            EmptyDataText="Your cart is empty">
+            <div class="sectiontitle">
+                Shopping Cart
+            </div>
 
-            <Columns>
+            <asp:Repeater ID="Repeater1"
+                runat="server">
 
-                <asp:BoundField DataField="ProductName"
-                    HeaderText="Product Name" />
+                <ItemTemplate>
 
-                <asp:BoundField DataField="Quantity"
-                    HeaderText="Quantity" />
+                    <div class="item">
 
-                <asp:TemplateField HeaderText="Action">
+                        <div class="left">
 
-                    <ItemTemplate>
+                            <img src='<%# Eval("ImageUrl") %>'
+                                class="productimg" />
+
+                            <div>
+
+                                <div class="name">
+                                    <%# Eval("ProductName") %>
+                                </div>
+
+                                <div class="price">
+                                    ₹ <%# Eval("Price") %>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="qtybox">
+
+                            <asp:Button ID="btnMinus"
+                                runat="server"
+                                Text="-"
+                                CssClass="qtybtn"
+                                CommandArgument='<%# Eval("Id") %>'
+                                OnClick="btnMinus_Click" />
+
+                            <div class="qtylabel">
+                                <%# Eval("Quantity") %>
+                            </div>
+
+                            <asp:Button ID="btnPlus"
+                                runat="server"
+                                Text="+"
+                                CssClass="qtybtn"
+                                CommandArgument='<%# Eval("Id") %>'
+                                OnClick="btnPlus_Click" />
+
+                        </div>
 
                         <asp:Button ID="btnDelete"
                             runat="server"
                             Text="Delete"
                             CssClass="deletebtn"
-                            CommandName="DeleteItem"
-                            CommandArgument='<%# Container.DataItemIndex %>' />
+                            CommandArgument='<%# Eval("Id") %>'
+                            OnClick="btnDelete_Click" />
 
-                    </ItemTemplate>
+                    </div>
 
-                </asp:TemplateField>
+                </ItemTemplate>
 
-            </Columns>
+            </asp:Repeater>
 
-        </asp:GridView>
-
-        <div class="footer">
-
-            <asp:Button ID="btnClearCart"
+            <asp:Label ID="lblEmpty"
                 runat="server"
-                Text="Clear Cart"
-                CssClass="clearbtn"
-                OnClick="btnClearCart_Click" />
+                CssClass="empty"
+                Visible="false"
+                Text="🛒 Your Cart is Empty">
+            </asp:Label>
+
+        </div>
+
+        <div class="summary">
+
+            <div class="summarytitle">
+                Order Summary
+            </div>
+
+            <div class="row">
+
+                <span>Total Items</span>
+
+                <asp:Label ID="lblItems"
+                    runat="server">
+                </asp:Label>
+
+            </div>
+
+            <div class="row total">
+
+                <span>Total</span>
+
+                <asp:Label ID="lblTotal"
+                    runat="server">
+                </asp:Label>
+
+            </div>
+
+            <asp:Button ID="btnCheckout"
+                runat="server"
+                Text="Proceed To Checkout"
+                CssClass="checkoutbtn" 
+                OnClick="btnCheckout_Click"/>
 
         </div>
 
     </div>
+
+</div>
 
 </form>
 

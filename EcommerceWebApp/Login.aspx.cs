@@ -11,11 +11,18 @@ namespace EcommerceWebApp
 
         protected void btnLogin_Click(object sender, EventArgs e)
         {
+            string role = "User";
+
+            if (rbAdmin.Checked)
+            {
+                role = "Admin";
+            }
+
             con.Open();
 
             SqlCommand cmd =
                 new SqlCommand(
-                    "SELECT * FROM Users WHERE Email=@email AND Password=@password",
+                    "SELECT * FROM Users WHERE Email=@email AND Password=@password AND Role=@role",
                     con);
 
             cmd.Parameters.AddWithValue(
@@ -23,6 +30,9 @@ namespace EcommerceWebApp
 
             cmd.Parameters.AddWithValue(
                 "@password", txtPassword.Text);
+
+            cmd.Parameters.AddWithValue(
+                "@role", role);
 
             SqlDataReader dr =
                 cmd.ExecuteReader();
@@ -38,8 +48,7 @@ namespace EcommerceWebApp
                 Session["role"] =
                     dr["Role"].ToString();
 
-                // ADMIN LOGIN
-                if (dr["Role"].ToString() == "Admin")
+                if (role == "Admin")
                 {
                     Response.Redirect("Admin.aspx");
                 }
@@ -51,7 +60,7 @@ namespace EcommerceWebApp
             else
             {
                 Response.Write(
-                    "<script>alert('Invalid Email or Password')</script>");
+                    "<script>alert('Invalid Login Details')</script>");
             }
 
             con.Close();
